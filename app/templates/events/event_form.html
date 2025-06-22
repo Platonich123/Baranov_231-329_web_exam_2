@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Редактировать мероприятие' if edit else 'Создать мероприятие' }}{% endblock %}
+{% block content %}
+<h2>{{ 'Редактировать мероприятие' if edit else 'Создать мероприятие' }}</h2>
+<form method="post" {% if not edit %}enctype="multipart/form-data"{% endif %}>
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+        {{ form.title.label(class="form-label") }}
+        {{ form.title(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.description.label(class="form-label") }}
+        {{ form.description(class="form-control", rows=5) }}
+        <small class="form-text text-muted">Поддерживается Markdown</small>
+    </div>
+    <div class="mb-3">
+        {{ form.date.label(class="form-label") }}
+        {{ form.date(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.location.label(class="form-label") }}
+        {{ form.location(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.required_volunteers.label(class="form-label") }}
+        {{ form.required_volunteers(class="form-control") }}
+    </div>
+    {% if not edit %}
+    <div class="mb-3">
+        {{ form.image.label(class="form-label") }}
+        {{ form.image(class="form-control") }}
+    </div>
+    {% endif %}
+    <button type="submit" class="btn btn-success">Сохранить</button>
+    <a href="{{ url_for('main.index') }}" class="btn btn-secondary">Отмена</a>
+</form>
+{% endblock %} 

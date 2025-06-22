@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}{{ event.title }}{% endblock %}
+{% block content %}
+<div class="card mb-3">
+    <div class="row g-0">
+        <div class="col-md-4">
+            <img src="{{ url_for('static', filename='uploads/' ~ event.image_filename) }}" class="img-fluid rounded-start" alt="{{ event.title }}">
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h3 class="card-title">{{ event.title }}</h3>
+                <p class="card-text"><strong>Дата:</strong> {{ event.date.strftime('%d.%m.%Y') }}</p>
+                <p class="card-text"><strong>Место:</strong> {{ event.location }}</p>
+                <p class="card-text"><strong>Организатор:</strong> {{ event.organizer.last_name }} {{ event.organizer.first_name }}</p>
+                <p class="card-text"><strong>Требуемое количество волонтёров:</strong> {{ event.required_volunteers }}</p>
+                <hr>
+                <div class="card-text">{{ html_description|safe }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% if can_register %}
+    {% if not registration %}
+        <a href="{{ url_for('registrations.register', event_id=event.id) }}" class="btn btn-success mt-3">Зарегистрироваться</a>
+    {% else %}
+        <div class="alert alert-info mt-3">
+            <strong>Вы уже подали заявку.</strong><br>
+            Дата подачи: {{ registration.registration_date.strftime('%d.%m.%Y %H:%M') }}<br>
+            Статус: {{ registration.status }}<br>
+            Контактные данные: {{ registration.contact_info }}
+        </div>
+    {% endif %}
+{% endif %}
+{% if can_see_volunteers %}
+    <h4 class="mt-4">Зарегистрированные волонтёры</h4>
+    <ul class="list-group mb-3">
+        {% for reg in event.registrations if reg.status == 'accepted' %}
+        <li class="list-group-item">
+            {{ reg.volunteer.last_name }} {{ reg.volunteer.first_name }} | {{ reg.contact_info }} | {{ reg.registration_date.strftime('%d.%m.%Y %H:%M') }}
+        </li>
+        {% else %}
+        <li class="list-group-item">Нет принятых волонтёров</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+{% if can_moderate %}
+    <h4>Заявки в ожидании</h4>
+    <ul class="list-group mb-3">
+        {% for reg in event.registrations if reg.status == 'pending' %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ reg.volunteer.last_name }} {{ reg.volunteer.first_name }} | {{ reg.contact_info }} | {{ reg.registration_date.strftime('%d.%m.%Y %H:%M') }}
+            <div>
+                <form method="post" action="{{ url_for('registrations.accept', reg_id=reg.id) }}" style="display:inline;">
+                    <button type="submit" class="btn btn-success btn-sm">Принять</button>
+                </form>
+                <form method="post" action="{{ url_for('registrations.reject', reg_id=reg.id) }}" style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-sm">Отклонить</button>
+                </form>
+            </div>
+        </li>
+        {% else %}
+        <li class="list-group-item">Нет заявок в ожидании</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+<a href="{{ url_for('main.index') }}" class="btn btn-secondary">Назад к списку</a>
+{% endblock %} 

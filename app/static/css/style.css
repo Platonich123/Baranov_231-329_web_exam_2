@@ -1,0 +1,73 @@
+html, body {
+    height: 100%;
+}
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(120deg, #f8fafc 0%, #e0e7ff 100%);
+}
+.container.py-4 {
+    flex: 1 0 auto;
+}
+.footer {
+    flex-shrink: 0;
+    background: #f1f5f9;
+    border-top: 1px solid #e2e8f0;
+}
+.card {
+    box-shadow: 0 2px 16px 0 rgba(60,72,88,.10);
+    border-radius: 1rem;
+    transition: box-shadow 0.2s;
+}
+.card:hover {
+    box-shadow: 0 4px 32px 0 rgba(60,72,88,.18);
+}
+.btn-primary, .btn-success, .btn-warning, .btn-danger {
+    border-radius: 2rem;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+.btn-primary {
+    background: linear-gradient(90deg, #2563eb 0%, #60a5fa 100%);
+    border: none;
+}
+.btn-success {
+    background: linear-gradient(90deg, #059669 0%, #34d399 100%);
+    border: none;
+}
+.btn-warning {
+    background: linear-gradient(90deg, #f59e42 0%, #fbbf24 100%);
+    border: none;
+}
+.btn-danger {
+    background: linear-gradient(90deg, #ef4444 0%, #f87171 100%);
+    border: none;
+}
+.form-control, .form-select {
+    border-radius: 1rem;
+    box-shadow: none;
+    border: 1px solid #e5e7eb;
+}
+.alert {
+    border-radius: 1rem;
+}
+.animate__animated {
+    animation-duration: 0.7s;
+    animation-fill-mode: both;
+}
+.animate__fadeInDown {
+    animation-name: fadeInDown;
+}
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translate3d(0, -30%, 0);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+} 

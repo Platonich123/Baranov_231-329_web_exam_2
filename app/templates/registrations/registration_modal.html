@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Регистрация на мероприятие{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="mb-4">Регистрация на мероприятие: <span class="text-primary">{{ event.title }}</span></h2>
+                    <form method="post">
+                        {{ form.hidden_tag() }}
+                        <div class="mb-3">
+                            {{ form.contact_info.label(class="form-label") }}
+                            {{ form.contact_info(class="form-control", placeholder="Ваши контактные данные") }}
+                        </div>
+                        <button type="submit" class="btn btn-success">Отправить заявку</button>
+                        <a href="{{ url_for('main.index') }}" class="btn btn-secondary ms-2">Отмена</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
