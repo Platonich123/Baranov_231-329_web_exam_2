@@ -8,4 +8,5 @@ WTForms
 Flask-Bootstrap
 markdown
 bleach
-python-dotenv 
+python-dotenv
+gunicorn
