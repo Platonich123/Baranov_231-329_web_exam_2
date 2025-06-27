@@ -11,8 +11,6 @@ import markdown
 import bleach
 from app.auth.routes import login_required_with_flash
 
-# Здесь будут маршруты для создания, редактирования, удаления, просмотра мероприятий 
-
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 UPLOAD_FOLDER = 'app/static/uploads'
 
