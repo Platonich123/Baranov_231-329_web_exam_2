@@ -18,6 +18,8 @@ class User(UserMixin, db.Model):
     middle_name = db.Column(db.String(64))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False)
     role = db.relationship('Role', backref='users')
+    organized_events = db.relationship('Event', backref='organizer', cascade='all, delete-orphan')
+    registrations = db.relationship('Registration', backref='volunteer', cascade='all, delete-orphan')
 
 class Event(db.Model):
     __tablename__ = 'events'
@@ -29,7 +31,7 @@ class Event(db.Model):
     required_volunteers = db.Column(db.Integer, nullable=False)
     image_filename = db.Column(db.String(128), nullable=False)
     organizer_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    organizer = db.relationship('User', backref='organized_events')
+    registrations = db.relationship('Registration', backref='event', cascade='all, delete-orphan')
 
 class Registration(db.Model):
     __tablename__ = 'registrations'
@@ -38,6 +40,4 @@ class Registration(db.Model):
     volunteer_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
     contact_info = db.Column(db.String(128), nullable=False)
     registration_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-    status = db.Column(db.String(16), nullable=False, default='pending')
-    event = db.relationship('Event', backref='registrations')
-    volunteer = db.relationship('User', backref='registrations') 
+    status = db.Column(db.String(16), nullable=False, default='pending') 

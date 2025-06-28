@@ -7,8 +7,6 @@ from datetime import datetime
 from .forms import RegistrationForm
 from app.auth.routes import login_required_with_flash
 
-# Здесь будут маршруты для регистрации, подтверждения и отклонения заявок 
-
 @registrations_bp.route('/events/<int:event_id>/register', methods=['GET', 'POST'])
 @login_required_with_flash
 def register(event_id):
@@ -73,4 +71,25 @@ def reject(reg_id):
     reg.status = 'rejected'
     db.session.commit()
     flash('Заявка отклонена.', 'info')
+    return redirect(url_for('events.view_event', event_id=event.id))
+
+@registrations_bp.route('/registrations/<int:reg_id>/delete', methods=['POST'])
+@login_required_with_flash
+def delete_registration(reg_id):
+    reg = Registration.query.get_or_404(reg_id)
+    event = reg.event
+    
+    # Проверяем права доступа: пользователь может удалить свою регистрацию, модератор - любую
+    if current_user.role.name not in ['moderator', 'admin'] and current_user.id != reg.volunteer_id:
+        flash('У вас недостаточно прав для выполнения данного действия', 'danger')
+        return redirect(url_for('events.view_event', event_id=event.id))
+    
+    try:
+        db.session.delete(reg)
+        db.session.commit()
+        flash('Регистрация успешно удалена!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash('Ошибка при удалении регистрации.', 'danger')
+    
     return redirect(url_for('events.view_event', event_id=event.id)) 

@@ -103,6 +103,14 @@ def delete_event(event_id):
         flash('У вас недостаточно прав для выполнения данного действия', 'danger')
         return redirect(url_for('main.index'))
     try:
+
+        # Удаляем файл изображения с диска
+        if event.image_filename:
+            image_path = os.path.join(UPLOAD_FOLDER, event.image_filename)
+            if os.path.exists(image_path):
+                os.remove(image_path)
+        
+        # Удаляем событие из базы данных
         db.session.delete(event)
         db.session.commit()
         flash('Мероприятие успешно удалено!', 'success')
